@@ -1,28 +1,54 @@
 # home-network-status
+<a id="markdown-home-network-status" name="home-network-status"></a>
 
-dupulicated は elasticsearch導入前にローカルで頑張っていたときのスクリプト。
+This scripts were created for visualizing home network statuses with `Elasticsearch`. So main purpose of these is to send json data into Elasticsearch.
 
-## check_ip.sh (duplicated)
+At the visualization phase, I used `grafana` and make a dashboard like <https://ta08.github.io/posts/20190823t23/> (written in Japanese) . No codes are here about the visualization phase. 
 
-前回保存したifconfigのと今回のifconfigの結果が異なっていれば新しくファイルを保存する。
 
-## trafic_post.sh
+<!-- TOC -->
+
+- [Prerequirement](#prerequirement)
+- [Usage](#usage)
+    - [postwifistatusasjson.sh](#postwifistatusasjsonsh)
+    - [postpingasjson.py](#postpingasjsonpy)
+- [Elasticsearch memo](#elasticsearch-memo)
+
+<!-- /TOC -->
+
+
+## Prerequirement
+<a id="markdown-prerequirement" name="prerequirement"></a>
+
+Both of scripts use Elasticsearch. Please run Elasticsearch on your local machine with 9200 port.
+
+## Usage
+<a id="markdown-usage" name="usage"></a>
+
+### post_wifi_status_as_json.sh
+<a id="markdown-postwifistatusasjsonsh" name="postwifistatusasjsonsh"></a>
+
+Just only work on MacOS. Prepare `network_status` as index at your Elasticsearch. This scirpt requires `jq`, `httpie` commands.
 
 ElasticsearchにWifiの情報をJSONに整形して突っ込む。
 
-## convert2json.py
+```
+watch -n 5 ./post_wifi_status_as_json.sh
+```
+
+### post_ping_as_json.py
+<a id="markdown-postpingasjsonpy" name="postpingasjsonpy"></a>
+
+Work with Python 3.7.4. Lower versions are not confirmed to work but I think it will work. Please install libraries with requirements.txt.
 
 Elasticsearchにpingの結果をJSONに整形して突っ込む。
 
 ```sh
-ping -i 8.8.8.8 | python -u convert2json.py ping_google
+ping -i 5 8.8.8.8 | python -u post_ping_as_json.py ping_google
 ```
 
-## Elasticsearch操作
-
-```sh
-http get http://localhost:9200/_cat/indices
-```
+## Elasticsearch memo
+<a id="markdown-elasticsearch-memo" name="elasticsearch-memo"></a>
 
 ```sh
 http get http://localhost:9200/_cat/indices
