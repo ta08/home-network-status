@@ -15,7 +15,6 @@ if __name__ == '__main__':
     index_name = sys.argv[1].strip()
     url = "http://127.0.0.1:9200/{}/ping".format(index_name)
     
-    
     for txt in iter(sys.stdin.readline, ""):
         payload = {}
         
@@ -29,11 +28,8 @@ if __name__ == '__main__':
         if time_matcher:    
             payload['pingTime'] =  float(time_matcher.group(1))
             payload['canConnect2Endpoint'] = 1
-            #print("time=", time_matcher.group(1),txt )
         elif "timeout" in txt:
             payload['canConnect2Endpoint'] = 0
-            #print('ooooops', txt)            
-        #print('dump json')
         else:
             continue
         
@@ -43,10 +39,6 @@ if __name__ == '__main__':
                 headers = {'Content-Type': 'application/json'}) as response:
         
             print(response.status_code, payload)
-        
-        
-        
-        #sys.stdout.flush()
     
-    print('ennnnnnd')
+    print('end')
 
